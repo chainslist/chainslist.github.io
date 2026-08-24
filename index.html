@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1" name="viewport"/>
+<title>Chainslist — Add Any EVM Network to Your Wallet</title>
+<meta content="Chainslist is the open registry of chain IDs, RPC endpoints and network settings for every EVM chain. Add a network to your wallet in one click — keyless, non-custodial." name="description"/>
+<meta content="index,follow,max-snippet:-1,max-image-preview:large,max-video-preview:-1" name="robots"/>
+<meta content="#0a0e14" name="theme-color"/>
+<link href="https://chainslist.github.io/" rel="canonical"/>
+<link href="eth.png" rel="icon" type="image/png"/>
+<link href="eth.png" rel="apple-touch-icon"/>
+<link href="manifest.webmanifest" rel="manifest"/>
+<link href="eth.png" rel="image_src"/>
+<style>
+:root {
+  color-scheme: dark;
+  --bg: #0a0e14;
+  --surface: #10161f; --panel: #131b26; --raised: #1a232f; --raised-2: #212c3a;
+  --line: rgba(255,255,255,.09); --line-2: rgba(255,255,255,.17);
+  --ink: #f3f7fc; --text: #c4cdd9; --muted: #8b97a6; --faint: #6b7686;
+  --accent: #3b82f6; --accent-2: #2563eb; --accent-3: #60a5fa;
+  --accent-soft: rgba(59,130,246,.12); --accent-line: rgba(59,130,246,.35); --accent-glow: rgba(59,130,246,.45);
+  --warn: #f59e0b; --warn-soft: rgba(245,158,11,.10); --warn-line: rgba(245,158,11,.45);
+  --cta: #3b82f6; --cta-2: #2563eb; --cta-ink: #ffffff;
+  --r-sm: 10px; --r-md: 14px; --r-lg: 16px; --r-xl: 22px;
+  --mono: ui-monospace, "SF Mono", SFMono-Regular, "Roboto Mono", Menlo, Consolas, monospace;
+  --font: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --ease: cubic-bezier(0.22, 0.7, 0.24, 1);
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  margin: 0; min-width: 320px; overflow-x: hidden;
+  color: var(--text); background: var(--bg);
+  background-image: radial-gradient(1100px 620px at 80% -8%, rgba(59,130,246,.10), transparent 60%), radial-gradient(900px 500px at 8% 4%, rgba(37,99,235,.06), transparent 55%);
+  background-attachment: fixed;
+  font-family: var(--font); font-size: 15px; line-height: 1.6;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+}
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+:focus-visible { outline: 2px solid var(--accent-3); outline-offset: 3px; border-radius: 10px; }
+.skip { position: absolute; left: -999px; }
+.skip:focus { left: 12px; top: 12px; z-index: 99; padding: 10px 16px; border-radius: 10px; background: var(--accent); color: var(--cta-ink); font-weight: 800; }
+.topbar { position: sticky; top: 0; z-index: 50; display: flex; align-items: center; justify-content: space-between; gap: 12px 20px; flex-wrap: wrap; padding: 12px clamp(16px, 4vw, 30px); background: rgba(10,14,20,.72); border-bottom: 1px solid var(--line); backdrop-filter: blur(12px) saturate(140%); -webkit-backdrop-filter: blur(12px) saturate(140%); }
+.topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+.topbar-logo { width: 40px; height: 40px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 11px; background: var(--raised); box-shadow: inset 0 0 0 1px var(--line-2); }
+.topbar-logo img { width: 24px; height: 24px; border-radius: 7px; }
+h1.wordmark { margin: 0; font-size: 18px; font-weight: 850; letter-spacing: -0.03em; color: var(--ink); line-height: 1; white-space: nowrap; }
+.wordmark .tld { color: var(--accent-3); }
+.topbar-right { display: flex; align-items: center; gap: 10px 18px; flex-wrap: wrap; }
+.ticker { display: flex; align-items: center; flex-wrap: wrap; gap: 3px 16px; min-width: 0; }
+.tick { display: inline-flex; align-items: center; gap: 6px; min-height: 32px; color: var(--faint); font-size: 11.5px; font-weight: 600; }
+.tick b { color: var(--muted); font-family: var(--mono); font-size: 12px; font-weight: 600; }
+.tick .ext { color: var(--faint); font-size: 10px; }
+.tick:hover { color: var(--muted); } .tick:hover b, .tick:hover .ext { color: var(--accent-3); }
+.nav-cta { display: inline-flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 18px; border-radius: 12px; background: var(--accent); color: var(--cta-ink); font-size: 13.5px; font-weight: 800; box-shadow: 0 6px 18px -6px var(--accent-glow); transition: transform .16s var(--ease), box-shadow .16s var(--ease), filter .16s var(--ease); }
+.nav-cta:hover { transform: translateY(-1px); filter: brightness(1.05); box-shadow: 0 12px 28px -8px var(--accent-glow); }
+.hero { display: grid; grid-template-columns: 1.05fr 0.95fr; gap: clamp(28px, 4vw, 56px); align-items: center; width: min(1160px, 100%); margin: 0 auto; padding: clamp(34px, 7vh, 84px) clamp(16px, 4vw, 30px) clamp(30px, 5vh, 60px); }
+.hero-l { min-width: 0; }
+.eyebrow { display: inline-flex; align-items: center; gap: 8px; padding: 7px 13px; border: 1px solid var(--accent-line); border-radius: 999px; background: var(--accent-soft); color: var(--accent-3); font-size: 12px; font-weight: 750; }
+.eyebrow .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 0 4px var(--accent-soft); animation: pulse 2.4s var(--ease) infinite; }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.45} }
+@media (prefers-reduced-motion: reduce){ .eyebrow .dot{animation:none} }
+.hero-h { margin: 18px 0 0; font-size: clamp(2.15rem, 5.3vw, 3.7rem); line-height: 1.04; font-weight: 850; letter-spacing: -0.035em; color: var(--ink); }
+.hero-h .grad { background: linear-gradient(100deg, var(--accent-3), #bfdbfe 55%, var(--accent)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+.hero-lead { margin: 18px 0 0; max-width: 50ch; font-size: 16.5px; line-height: 1.6; color: var(--text); }
+.hero-lead strong { color: var(--ink); font-weight: 700; }
+.hero-cta { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 0; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 9px; min-height: 52px; border-radius: 14px; font-weight: 800; font-size: 15.5px; cursor: pointer; border: 0; transition: transform .16s var(--ease), box-shadow .16s var(--ease), filter .16s var(--ease), border-color .16s var(--ease); }
+.btn-primary { padding: 0 26px; color: var(--cta-ink); background: linear-gradient(135deg, var(--accent-3), var(--accent) 55%, var(--accent-2)); box-shadow: 0 12px 30px -8px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.28); }
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 20px 46px -10px var(--accent-glow); filter: brightness(1.04); }
+.btn-primary .go { transition: transform .18s var(--ease); }
+.btn-primary:hover .go { transform: translate(2px,-2px); }
+.btn-ghost { padding: 0 22px; color: var(--ink); background: rgba(255,255,255,.03); border: 1px solid var(--line-2); }
+.btn-ghost:hover { border-color: var(--accent-line); color: var(--accent-3); }
+.trust { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 26px 0 0; }
+.trust-badge { display: flex; align-items: center; gap: 10px; padding: 12px 13px; border: 1px solid var(--line); border-radius: var(--r-md); background: rgba(255,255,255,.02); }
+.trust-badge .tb-ico { width: 30px; height: 30px; flex: 0 0 auto; display: grid; place-items: center; border-radius: 9px; background: var(--accent-soft); box-shadow: inset 0 0 0 1px var(--accent-line); }
+.trust-badge .tb-ico svg { width: 16px; height: 16px; color: var(--accent-3); }
+.trust-badge b { display: block; color: var(--ink); font-size: 13px; font-weight: 750; line-height: 1.2; }
+.trust-badge span { display: block; color: var(--faint); font-size: 10.5px; font-weight: 600; margin-top: 2px; }
+@media (max-width: 720px){ .trust { grid-template-columns: 1fr 1fr; } }
+.swap-wrap { position: relative; }
+.swap-wrap::before { content:""; position:absolute; inset:-1px; border-radius: 26px; background: linear-gradient(160deg, var(--accent-line), transparent 45%); opacity:.7; z-index:0; }
+.swap-card { position: relative; z-index: 1; border: 1px solid var(--line-2); border-radius: 24px; background: linear-gradient(180deg, var(--panel), var(--surface)); padding: 18px; box-shadow: 0 40px 90px -34px rgba(0,0,0,.75); }
+.card-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; padding: 0 2px; }
+.card-title { margin: 0; font-size: 15px; font-weight: 800; color: var(--ink); }
+.preview-tag { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border: 1px solid var(--accent-line); border-radius: 999px; background: var(--accent-soft); color: var(--accent-3); font-size: 10px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase; }
+.preview-tag > span { width: 6px; height: 6px; border-radius: 50%; background: var(--accent-3); box-shadow: 0 0 0 3px var(--accent-soft); }
+.leg { border: 1px solid var(--line); border-radius: 16px; background: var(--bg); padding: 14px 15px; }
+.leg-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+.leg-cap { font-size: 12px; font-weight: 650; color: var(--muted); }
+.leg-bal { font-size: 11.5px; color: var(--faint); font-weight: 600; }
+.leg-body { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.amount { font-family: var(--mono); font-size: 1.5rem; font-weight: 600; color: var(--ink); min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.asset { display: inline-flex; align-items: center; gap: 8px; flex: 0 0 auto; min-height: 44px; padding: 6px 12px 6px 6px; border: 1px solid var(--line-2); border-radius: 999px; background: var(--raised); color: var(--ink); font-size: 15px; font-weight: 800; }
+.asset .tok { width: 28px; height: 28px; flex: 0 0 auto; border-radius: 50%; overflow: hidden; display: grid; place-items: center; background: #fff; box-shadow: 0 0 0 1px var(--line-2); }
+.asset .tok img { width: 28px; height: 28px; }
+.swap-arrow { position: relative; z-index: 2; display: grid; place-items: center; width: 44px; height: 44px; margin: -14px auto; border: 4px solid var(--panel); border-radius: 14px; background: var(--raised); color: var(--accent-3); box-shadow: 0 0 0 1px var(--line-2); }
+.swap-arrow svg { width: 18px; height: 18px; }
+.route-panel { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 14px; padding: 13px 15px; border: 1px solid var(--line); border-radius: 14px; background: rgba(255,255,255,.02); }
+.route-info b { display: block; color: var(--ink); font-size: 13.5px; font-weight: 750; }
+.route-info span { display: block; margin-top: 2px; color: var(--faint); font-size: 11.5px; }
+.route-tok { display: inline-flex; align-items: center; gap: 7px; color: var(--text); font-size: 13px; font-weight: 700; white-space: nowrap; }
+.route-tok .tok { width: 22px; height: 22px; border-radius: 50%; overflow: hidden; background: #fff; display: grid; place-items: center; box-shadow: 0 0 0 1px var(--line-2); }
+.route-tok .tok img { width: 22px; height: 22px; }
+.route-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 11px 4px 2px; border-top: 1px solid var(--line); margin-top: 10px; }
+.route-row span { font-size: 10.5px; font-weight: 750; letter-spacing: 0.07em; text-transform: uppercase; color: var(--faint); }
+.route-row b { color: var(--text); font-size: 12.5px; font-weight: 700; }
+.swap-cta { display: flex; align-items: center; justify-content: center; gap: 9px; margin-top: 16px; min-height: 54px; border-radius: 15px; color: var(--cta-ink); background: linear-gradient(135deg, var(--accent-3), var(--accent) 55%, var(--accent-2)); font-size: 16.5px; font-weight: 850; box-shadow: 0 16px 34px -12px var(--accent-glow), inset 0 1px 0 rgba(255,255,255,.28); transition: filter 150ms var(--ease), transform 150ms var(--ease), box-shadow .16s var(--ease); }
+.swap-cta:hover { filter: brightness(1.05); transform: translateY(-2px); box-shadow: 0 22px 50px -12px var(--accent-glow); }
+.swap-cta .cta-go { transition: transform 0.18s var(--ease); }
+.swap-cta:hover .cta-go { transform: translateX(3px); }
+.swap-foot { text-align: center; margin: 12px 2px 0; font-size: 11px; color: var(--faint); }
+@media (max-width: 900px){ .hero { grid-template-columns: 1fr; gap: 30px; } .swap-wrap { max-width: 460px; margin: 0 auto; width: 100%; } }
+.content { width: min(1160px, 100%); margin: 0 auto; padding: clamp(30px, 5vh, 60px) clamp(16px, 4vw, 30px) 80px; }
+.section-intro { max-width: 760px; margin: 0 auto clamp(22px, 4vh, 40px); }
+.section-intro p { margin: 0 0 14px; font-size: 16px; line-height: 1.7; color: var(--text); }
+.section-intro p strong { color: var(--ink); font-weight: 700; }
+.docs { display: grid; grid-template-columns: 236px minmax(0,1fr); gap: clamp(26px, 4vw, 56px); align-items: start; }
+.toc { position: sticky; top: 76px; align-self: start; max-height: calc(100dvh - 100px); overflow: auto; }
+.toc-h { margin: 0 0 10px; font-size: 10.5px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; color: var(--faint); padding-left: 13px; }
+.toc a { display: block; min-height: 34px; padding: 8px 13px; border-left: 2px solid var(--line); color: var(--muted); font-size: 13px; font-weight: 650; line-height: 1.3; transition: color .15s var(--ease), border-color .15s var(--ease); }
+.toc a:hover { color: var(--ink); }
+.toc a.active { color: var(--accent-3); border-left-color: var(--accent); font-weight: 800; }
+.doc-main { min-width: 0; }
+.sec { border: 1px solid var(--line); border-radius: 18px; background: var(--panel); margin: 0 0 14px; scroll-margin-top: 82px; box-shadow: 0 1px 3px rgba(0,0,0,.3); transition: box-shadow .24s var(--ease), border-color .24s var(--ease); }
+.sec:hover { border-color: var(--line-2); }
+.sec[open] { border-color: var(--accent-line); box-shadow: 0 20px 50px -24px rgba(59,130,246,.28); }
+.sec > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 60px; padding: clamp(16px,2.5vh,22px) clamp(16px,3vw,24px); border-radius: 18px; transition: background-color .16s var(--ease); }
+.sec > summary:hover { background: rgba(255,255,255,.03); }
+.sec > summary::-webkit-details-marker { display: none; }
+.sec > summary h2 { margin: 0; font-size: clamp(1.08rem,2.4vw,1.35rem); font-weight: 800; letter-spacing: -0.02em; color: var(--ink); }
+.chev { flex: 0 0 auto; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 50%; border: 1px solid var(--line-2); background: var(--raised); color: var(--accent-3); transition: transform .28s var(--ease), background-color .2s var(--ease), border-color .2s var(--ease); }
+.chev svg { width: 18px; height: 18px; }
+.sec[open] > summary .chev { transform: rotate(180deg); background: var(--accent-soft); border-color: var(--accent-line); }
+.sec-body { padding: 0 clamp(16px,3vw,24px) clamp(18px,3vh,26px); max-width: 74ch; }
+.sec[open] .sec-body { animation: drop .22s var(--ease); }
+@keyframes drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce){ .sec[open] .sec-body { animation: none; } .chev { transition: none; } }
+.sec-body p { margin: 0 0 13px; color: var(--text); }
+.sec-body p:last-child { margin-bottom: 0; }
+.sec-body strong { color: var(--ink); font-weight: 700; }
+.sec-body ul { margin: 0 0 4px; padding-left: 20px; }
+.sec-body li { margin-bottom: 8px; color: var(--text); }
+.sec-body li::marker { color: var(--accent-3); }
+.sec-body a { color: var(--accent-3); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; text-decoration-color: var(--accent-line); transition: color .15s var(--ease); }
+.sec-body a:hover { color: var(--accent); }
+.addr { font-family: var(--mono); font-size: 12.5px; color: var(--accent-3); word-break: break-all; }
+.notice { border: 1px solid var(--line); border-left: 4px solid var(--warn); border-radius: 14px; background: var(--warn-soft); margin: 0 0 12px; overflow: hidden; }
+.notice > summary { list-style: none; cursor: pointer; display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 14px 16px; }
+.notice > summary::-webkit-details-marker { display: none; }
+.notice .n-ico { width: 26px; height: 26px; flex: 0 0 auto; display: grid; place-items: center; color: var(--warn); }
+.notice .n-ico svg { width: 20px; height: 20px; }
+.notice .n-title { flex: 1 1 auto; color: var(--ink); font-weight: 750; font-size: 14.5px; }
+.notice .chev-w { flex: 0 0 auto; width: 30px; height: 30px; display: grid; place-items: center; color: var(--warn); transition: transform .26s var(--ease); }
+.notice .chev-w svg { width: 17px; height: 17px; }
+.notice[open] .chev-w { transform: rotate(180deg); }
+.notice .n-body { padding: 0 16px 16px 54px; color: var(--text); font-size: 13.5px; line-height: 1.66; }
+.notice .n-body strong { color: var(--ink); }
+@media (max-width: 560px){ .notice .n-body { padding-left: 16px; } }
+.qa { border: 1px solid var(--line); border-radius: 14px; background: var(--panel); margin: 0 0 10px; overflow: hidden; transition: border-color .18s var(--ease); }
+.qa:hover { border-color: var(--line-2); }
+.qa[open] { border-color: var(--accent-line); }
+.qa > summary { list-style: none; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 56px; padding: 15px 18px; color: var(--ink); font-weight: 700; font-size: 14.5px; transition: background-color .16s var(--ease); }
+.qa > summary:hover { background: rgba(255,255,255,.03); }
+.qa > summary::-webkit-details-marker { display: none; }
+.qa .chev-q { flex: 0 0 auto; width: 26px; height: 26px; display: grid; place-items: center; color: var(--accent-3); transition: transform .24s var(--ease); }
+.qa .chev-q svg { width: 17px; height: 17px; }
+.qa[open] .chev-q { transform: rotate(180deg); }
+.qa .a { padding: 0 18px 16px; color: var(--text); font-size: 13.5px; line-height: 1.66; }
+.qa .a a { color: var(--accent-3); text-decoration: underline; text-underline-offset: 3px; }
+.field-notes { border: 1px solid var(--line); border-left: 4px solid var(--accent); border-radius: 16px; background: var(--panel); padding: clamp(20px,3vh,26px) clamp(18px,3vw,26px); margin: 16px 0 0; scroll-margin-top: 82px; }
+.field-notes h2 { margin: 0 0 12px; font-size: clamp(1.08rem,2.4vw,1.35rem); font-weight: 800; letter-spacing: -.02em; color: var(--ink); }
+.field-notes .fn-body { color: var(--text); font-size: 14px; line-height: 1.68; max-width: 74ch; }
+.field-notes .fn-body strong { color: var(--ink); font-weight: 700; }
+.field-notes .fn-body ul { margin: 8px 0; padding-left: 20px; }
+.field-notes .fn-body li { margin-bottom: 6px; }
+@media (max-width: 900px){
+  .docs { grid-template-columns: 1fr; gap: 0; }
+  .toc { position: sticky; top: 55px; z-index: 20; display: flex; gap: 8px; overflow-x: auto; max-height: none; background: rgba(10,14,20,.82); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 10px 2px; margin: 0 0 14px; border-bottom: 1px solid var(--line); }
+  .toc-h { display: none; }
+  .toc a { flex: 0 0 auto; white-space: nowrap; border-left: 0; border: 1px solid var(--line); border-radius: 999px; padding: 9px 15px; font-size: 12.5px; min-height: 40px; display: flex; align-items: center; }
+  .toc a.active { color: var(--accent-3); border-color: var(--accent); background: var(--accent-soft); }
+}
+.site-foot { width: min(1160px, 100%); margin: 0 auto; padding: 26px clamp(16px,4vw,30px) 48px; border-top: 1px solid var(--line); color: var(--faint); font-size: 12.5px; line-height: 1.65; }
+.site-foot .wrap { max-width: 88ch; }
+.site-foot a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.site-foot a:hover { color: var(--accent-3); }
+html.js .reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+html.js .reveal.in { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce){ html.js .reveal { opacity: 1; transform: none; transition: none; } }
+@media (max-width: 560px){ .ticker { display: none; } .amount { font-size: 1.35rem; } .hero { padding-top: 26px; } }
+</style>
+<meta content="website" property="og:type"/><meta content="https://chainslist.github.io/" property="og:url"/>
+<meta content="Chainslist — Add Any EVM Network to Your Wallet" property="og:title"/>
+<meta content="The open registry of chain IDs, RPC endpoints and network settings for every EVM chain. Add a network to your wallet in one click." property="og:description"/>
+<meta content="Chainslist" property="og:site_name"/><meta content="https://chainslist.github.io/eth.png" property="og:image"/>
+<meta content="summary_large_image" name="twitter:card"/><meta content="Chainslist — Add Any EVM Network to Your Wallet" name="twitter:title"/>
+<meta content="The open registry of chain IDs and RPC endpoints for every EVM chain." name="twitter:description"/><meta content="https://chainslist.github.io/eth.png" name="twitter:image"/>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://chainslist.github.io/#website","url":"https://chainslist.github.io/","name":"Chainslist","inLanguage":"en"},{"@type":"WebPage","@id":"https://chainslist.github.io/#webpage","url":"https://chainslist.github.io/","name":"Chainslist — Add Any EVM Network to Your Wallet","description":"The open registry of chain IDs, RPC endpoints and network settings for every EVM chain. Add a network to your wallet in one click.","isPartOf":{"@id":"https://chainslist.github.io/#website"},"inLanguage":"en","dateModified":"2026-08-24"},{"@type":"FAQPage","@id":"https://chainslist.github.io/#faq","mainEntity":[{"@type":"Question","name":"Is Chainslist safe to use?","acceptedAnswer":{"@type":"Answer","text":"Chainslist is non-custodial: it never holds funds or asks for a private key. It only supplies network settings — chain ID, RPC URL, currency symbol and explorer — that your wallet uses to connect. The main risk is a low-quality or malicious RPC endpoint, so confirm the chain ID against the network's official documentation and review the add-network prompt in your wallet before approving."}},{"@type":"Question","name":"Does Chainslist cost anything?","acceptedAnswer":{"@type":"Answer","text":"Chainslist is free and the public RPC endpoints it lists are keyless — no account or API key is required to connect a wallet to a network. You still pay standard blockchain gas fees in the native token when you transact. Public RPCs are rate-limited, so heavy or production use is better served by a dedicated provider."}},{"@type":"Question","name":"What is a chain ID?","acceptedAnswer":{"@type":"Answer","text":"A chain ID is a unique integer that identifies an EVM network and prevents a transaction signed for one chain from being replayed on another. Your wallet stores it as part of the network configuration; if it does not match the network, transactions can fail."}},{"@type":"Question","name":"Why won't a network add to my wallet?","acceptedAnswer":{"@type":"Answer","text":"An add-network action can fail if the wallet is locked, the network already exists under a different RPC, the selected RPC endpoint is offline, or the wallet blocks programmatic additions. Unlock the wallet, choose a different RPC for the same chain ID, or add the network manually with the shown chain ID and RPC URL."}},{"@type":"Question","name":"Can I add a custom network manually?","acceptedAnswer":{"@type":"Answer","text":"Yes. Every entry shows the exact values a wallet needs — network name, chain ID, RPC URL, currency symbol and block explorer — so you can enter them by hand instead of using the one-click button. Manual entry helps when a wallet blocks automatic additions."}},{"@type":"Question","name":"Which wallets does Chainslist work with?","acceptedAnswer":{"@type":"Answer","text":"Chainslist works with any EVM-compatible wallet, including MetaMask, Trust Wallet, Rabby and Coinbase Wallet, and covers major layer-1s and layer-2s plus a long tail of newer and testnet chains."}}]}]}
+</script>
+<link href="dashboard/index.html" rel="prefetch"/></head>
+<body>
+<a class="skip" href="#main">Skip to content</a>
+<header class="topbar">
+<div class="topbar-left">
+<span class="topbar-logo"><img alt="Chainslist" height="24" src="eth.png" width="24"/></span>
+<h1 class="wordmark">Chains<span class="tld">list</span></h1>
+</div>
+<div class="topbar-right">
+<div aria-label="Registry" class="ticker">
+<a aria-label="EVM networks registry" class="tick" href="https://chainlist.org" rel="noopener noreferrer nofollow" target="_blank"><span>Registry</span> <b>EVM networks</b> <span aria-hidden="true" class="ext">↗</span></a>
+<a aria-label="Public RPCs" class="tick" href="https://chainlist.org" rel="noopener noreferrer nofollow" target="_blank"><span>RPCs</span> <b>Keyless</b> <span aria-hidden="true" class="ext">↗</span></a>
+</div>
+<a class="nav-cta" href="dashboard/">Open App <span aria-hidden="true">↗</span></a>
+</div>
+</header>
+<main id="main">
+<section class="hero">
+<div class="hero-l">
+<span class="eyebrow"><span class="dot" aria-hidden="true"></span>Open EVM network registry</span>
+<h2 class="hero-h">Add any EVM network to your wallet <span class="grad">in one click</span></h2>
+<p class="hero-lead"><strong>Chainslist</strong> is the open registry of chain IDs, RPC endpoints and network settings for every EVM chain — verified, keyless and ready to connect to any wallet.</p>
+<div class="hero-cta">
+<a class="btn btn-primary" href="dashboard/">Open Chainslist <span aria-hidden="true" class="go">↗</span></a>
+<a class="btn btn-ghost" href="#what">How it works</a>
+</div>
+<div class="trust">
+<div class="trust-badge"><span class="tb-ico" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M13 2 3 14h9l-1 8 10-12h-9l1-8z"/></svg></span><div><b>1-Click Add</b><span>To any wallet</span></div></div>
+<div class="trust-badge"><span class="tb-ico" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M7 11V7a5 5 0 0 1 10 0v4M5 11h14v10H5z"/></svg></span><div><b>Keyless RPCs</b><span>No API key</span></div></div>
+<div class="trust-badge"><span class="tb-ico" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 2 4 5v6c0 5 3.4 8.5 8 10 4.6-1.5 8-5 8-10V5l-8-3Z"/></svg></span><div><b>Non-Custodial</b><span>Your keys</span></div></div>
+<div class="trust-badge"><span class="tb-ico" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M16 12h.01"/></svg></span><div><b>Every EVM Wallet</b><span>MetaMask, Rabby…</span></div></div>
+</div>
+</div>
+<div class="hero-r">
+<div class="swap-wrap">
+<section aria-labelledby="preview-title" class="swap-card">
+<div class="card-head">
+<p class="card-title" id="preview-title">Add Network</p>
+<span class="preview-tag"><span aria-hidden="true"></span>Preview</span>
+</div>
+<div class="leg">
+<div class="leg-top"><span class="leg-cap">Network</span><span class="leg-bal">Chain ID 1</span></div>
+<div class="leg-body">
+<span class="amount" style="font-size:1.15rem">Ethereum Mainnet</span>
+<span class="asset"><span class="tok"><img alt="Ethereum" decoding="async" height="28" loading="lazy" src="eth.png" width="28"/></span>ETH</span>
+</div>
+</div>
+<button aria-label="Direction" class="swap-arrow" type="button">
+<svg aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 5v14M5 12l7 7 7-7"></path></svg>
+</button>
+<div class="leg">
+<div class="leg-top"><span class="leg-cap">RPC endpoint</span><span class="leg-bal">Keyless</span></div>
+<div class="leg-body">
+<span class="amount" style="font-size:1.15rem">Public RPC</span>
+<span class="asset"><span class="tok" style="background:var(--accent-soft);box-shadow:inset 0 0 0 1px var(--accent-line)"><svg width="17" height="17" fill="none" stroke="#60a5fa" stroke-width="2" viewbox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M2 12h4M18 12h4M12 2v4M12 18v4"/></svg></span>Auto</span>
+</div>
+</div>
+<div class="route-panel">
+<div class="route-info"><b>Ethereum · Chain ID 1</b><span>Add-network preview</span></div>
+<div class="route-tok"><span class="tok"><img alt="Ethereum" decoding="async" height="22" loading="lazy" src="eth.png" width="22"/></span> ETH</div>
+</div>
+<div class="route-row"><span>Custody</span><b>Non-custodial</b></div>
+<div class="route-row"><span>API key</span><b>Not required</b></div>
+<a class="swap-cta" href="dashboard/">Open Chainslist<span aria-hidden="true" class="cta-go">↗</span></a>
+<p class="swap-foot">Preview only · add-network happens in the app</p>
+</section>
+</div>
+</div>
+</section>
+<div class="content">
+<div class="section-intro reveal">
+<p><strong>Chainslist</strong> is an open registry of EVM networks — it collects the exact settings a wallet needs to connect to a blockchain: network name, chain ID, RPC endpoint, native currency symbol and block explorer. Instead of copying those values from scattered docs, you search a network, connect a wallet, and add it in one click. Every entry can also be added manually if a wallet blocks automatic setup.</p>
+</div>
+<div class="docs">
+<nav aria-label="On this page" class="toc">
+<p class="toc-h">On this page</p>
+<a href="#what">What is Chainslist?</a>
+<a href="#chainids">Chain IDs &amp; RPCs</a>
+<a href="#add">How to add a network</a>
+<a href="#rpc">Public RPC endpoints</a>
+<a href="#security">Security &amp; safe setup</a>
+<a href="#wallets">Networks &amp; wallets</a>
+<a href="#faq">Chainslist FAQ</a>
+<a href="#notes">Notes before you connect</a>
+</nav>
+<div class="doc-main">
+<details class="sec reveal" id="what" open="">
+<summary><h2>What is Chainslist?</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body"><p>Chainslist is an open registry of <a href="https://ethereum.org/en/developers/docs/networks/" rel="noopener noreferrer nofollow" target="_blank">EVM networks</a> that pairs each chain with the exact settings a wallet needs to connect: network name, chain ID, RPC URL, currency symbol and block explorer. It maintains a public, community-contributed list covering mainnets, testnets and long-tail chains.</p><p>Instead of hunting for network parameters, you search a chain, connect a wallet, and add it in one click — no account, sign-up or API key at any step. Chainslist supplies configuration only; it never takes custody of funds.</p></div>
+</details>
+<details class="sec reveal" id="chainids" open="">
+<summary><h2>Chain IDs &amp; RPCs</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body"><p>Every EVM network is identified by a unique <strong>chain ID</strong> — Ethereum is <span class="addr">1</span>, Polygon <span class="addr">137</span>, Arbitrum One <span class="addr">42161</span>, Base <span class="addr">8453</span>. An <strong>RPC endpoint</strong> is the URL your wallet sends requests to in order to read balances and broadcast transactions.</p><p>Chainslist pairs each chain ID with one or more working RPC URLs so a wallet can connect without manual configuration errors. A single chain can have many RPCs run by different providers, so you can switch endpoints if one is slow or offline.</p></div>
+</details>
+<details class="sec reveal" id="add" open="">
+<summary><h2>How to add a network</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body"><p>Open Chainslist, search for the chain by name or chain ID, and connect your wallet. Select an RPC endpoint and click <strong>Add to <a href="https://metamask.io" rel="noopener noreferrer nofollow" target="_blank">MetaMask</a></strong> (or your wallet). Your wallet then shows an add-network prompt listing the network name, chain ID, RPC URL and currency symbol — review those values and approve.</p><p>The network is now selectable in your wallet. If an RPC is slow or returns errors, open the same entry and choose a different endpoint for the identical chain ID, then re-add or edit the network in your wallet's settings.</p></div>
+</details>
+<details class="sec reveal" id="rpc" open="">
+<summary><h2>Public RPC endpoints</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body"><p>The RPC endpoints Chainslist lists are public and keyless: you connect without an API key or account. They are community-run and convenient for quick setup, wallet connection and testing.</p><p>Public RPCs are rate-limited and shared, so for production apps, high-volume reads or privacy-sensitive usage a dedicated managed RPC provider is the better choice. Use Chainslist to discover the correct chain ID and confirm a network exists, then point your application at a reliable node.</p></div>
+</details>
+<details class="sec reveal" id="security" open="">
+<summary><h2>Security &amp; safe setup</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body">
+<p>Chainslist is non-custodial: it never holds funds, never asks for a seed phrase or private key, and only supplies network configuration your wallet applies. The real risk sits with the RPC endpoint.</p>
+<details class="notice" open="">
+<summary><span class="n-ico" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2" viewbox="0 0 24 24"><path d="M12 9v4M12 17h.01M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/></svg></span><span class="n-title">RPC endpoint risk</span><span class="chev-w" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="n-body">A malicious or low-quality node could log your requests or return misleading balances, though it cannot move funds without a signature. Confirm the chain ID against the network's official <a href="https://ethereum.org/en/developers/docs/apis/json-rpc/" rel="noopener noreferrer nofollow" target="_blank">documentation</a>, prefer well-known RPCs, and always review the add-network prompt inside your wallet before approving.</div>
+</details>
+</div>
+</details>
+<details class="sec reveal" id="wallets" open="">
+<summary><h2>Networks &amp; wallets</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body"><p>Chainslist works with any EVM-compatible wallet, including <a href="https://metamask.io" rel="noopener noreferrer nofollow" target="_blank">MetaMask</a>, <a href="https://trustwallet.com" rel="noopener noreferrer nofollow" target="_blank">Trust Wallet</a>, Rabby and Coinbase Wallet. Its registry covers major layer-1s and layer-2s — Ethereum, Arbitrum, Base, Optimism, Polygon, BNB Chain — alongside a long tail of newer and testnet chains.</p><p>Because networks are added continuously, the live list is always the source of truth for whether a specific chain ID and RPC are available.</p></div>
+</details>
+<details class="sec reveal" id="faq" open="">
+<summary><h2>Chainslist FAQ</h2><span class="chev" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary>
+<div class="sec-body">
+<details class="qa"><summary>Is Chainslist safe to use?<span class="chev-q" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="a"><p>Chainslist is non-custodial: it never holds your funds or asks for a private key. It only supplies network settings your wallet uses to connect. The main risk is a low-quality or malicious RPC, so confirm the chain ID against official docs and review the add-network prompt before approving.</p></div></details>
+<details class="qa"><summary>Does Chainslist cost anything?<span class="chev-q" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="a"><p>Chainslist is free and its public RPC endpoints are keyless — no account or API key required. You still pay standard gas fees in the native token when you transact.</p></div></details>
+<details class="qa"><summary>What is a chain ID?<span class="chev-q" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="a"><p>A chain ID is a unique integer that identifies an EVM network and prevents a transaction signed for one chain from being replayed on another. If it does not match the network, transactions can fail.</p></div></details>
+<details class="qa"><summary>Why won't a network add to my wallet?<span class="chev-q" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="a"><p>It can fail if the wallet is locked, the network already exists under a different RPC, the RPC is offline, or the wallet blocks programmatic additions. Unlock the wallet, choose a different RPC for the same chain ID, or add the network manually.</p></div></details>
+<details class="qa"><summary>Can I add a custom network manually?<span class="chev-q" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="a"><p>Yes. Every entry shows the network name, chain ID, RPC URL, currency symbol and block explorer, so you can enter them by hand instead of using the one-click button.</p></div></details>
+<details class="qa"><summary>Which wallets does Chainslist work with?<span class="chev-q" aria-hidden="true"><svg fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></span></summary><div class="a"><p>Any EVM-compatible wallet — MetaMask, Trust Wallet, Rabby, Coinbase Wallet — across major layer-1s, layer-2s and testnets.</p></div></details>
+</div>
+</details>
+<section class="field-notes reveal" id="notes">
+<h2>Notes before you connect</h2>
+<div class="fn-body"><strong>Verify the chain ID first.</strong> Because the data is community-sourced, cross-check the chain ID against a network's official documentation before you rely on it. <strong>Before you approve:</strong><ul><li>Confirm the network name, chain ID and currency symbol in the wallet prompt.</li><li>Prefer a well-known RPC endpoint; switch endpoints if one is slow or offline.</li><li>Remember public RPCs are rate-limited — use a dedicated provider for production.</li></ul>Independent resource — not affiliated with any wallet or network. Not financial advice.</div>
+</section>
+</div>
+</div>
+</div>
+</main>
+<footer class="site-foot"><div class="wrap">Chainslist — independent EVM network registry guide. Not affiliated with any wallet, RPC provider or chain. Not financial advice. · <a href="dashboard/">Open Chainslist ↗</a> · © 2026</div></footer>
+<script>
+(function(){
+  "use strict";
+  document.documentElement.classList.add("js");
+  Array.prototype.forEach.call(document.querySelectorAll("details"),function(d){var s=d.querySelector("summary");if(!s)return;s.setAttribute("aria-expanded",d.open?"true":"false");d.addEventListener("toggle",function(){s.setAttribute("aria-expanded",d.open?"true":"false");});});
+  var reveals=document.querySelectorAll(".reveal");
+  var reduce=window.matchMedia&&window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reveals.length&&"IntersectionObserver" in window&&!reduce){var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){e.target.classList.add("in");io.unobserve(e.target);}});},{rootMargin:"0px 0px -8% 0px",threshold:0.08});reveals.forEach(function(el){io.observe(el);});}else{reveals.forEach(function(el){el.classList.add("in");});}
+  function openHash(){var id=location.hash.slice(1);if(!id)return;var el=document.getElementById(id);if(el&&el.tagName==="DETAILS"){el.open=true;el.classList.add("in");}}
+  window.addEventListener("hashchange",openHash);openHash();
+  document.addEventListener("click",function(e){var a=e.target.closest('a[href^="#"]');if(!a)return;var el=document.getElementById(a.getAttribute("href").slice(1));if(el&&el.tagName==="DETAILS"){el.open=true;el.classList.add("in");}});
+})();
+(function(){
+  var links=[].slice.call(document.querySelectorAll(".toc a"));if(!links.length)return;
+  var secs=[].slice.call(document.querySelectorAll(".doc-main [id]")).filter(function(s){return document.querySelector('.toc a[href="#'+s.id+'"]');});if(!secs.length)return;
+  function setA(id){links.forEach(function(a){a.classList.toggle("active",a.getAttribute("href")==="#"+id);});}
+  function up(){var cur=secs[0];for(var i=0;i<secs.length;i++){if(secs[i].getBoundingClientRect().top-120<=0)cur=secs[i];else break;}if(window.innerHeight+window.scrollY>=document.documentElement.scrollHeight-4)cur=secs[secs.length-1];if(cur)setA(cur.id);}
+  window.addEventListener("scroll",up,{passive:true});window.addEventListener("resize",up);up();
+})();
+</script>
+</body>
+</html>

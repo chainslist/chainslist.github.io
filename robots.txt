@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://chainslist.github.io/sitemap.xml

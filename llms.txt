@@ -1,0 +1,24 @@
+# Chainslist — EVM Network Registry Reference
+
+> The open registry of chain IDs, RPC endpoints and network settings for every EVM chain. Add a network to your wallet in one click — keyless and non-custodial.
+
+## Key Facts
+- Registry of chain IDs, RPC URLs, currency symbols and block explorers for EVM networks
+- One-click "Add to wallet" plus manual add-network values
+- Public RPC endpoints are keyless — no API key or account required
+- Non-custodial: never holds funds or asks for a private key
+- Chain ID examples: Ethereum 1, Polygon 137, Arbitrum One 42161, Base 8453
+- Works with MetaMask, Trust Wallet, Rabby, Coinbase Wallet and any EVM wallet
+
+## Internal Sections & App Navigation
+- [What is Chainslist?](#what)
+- [Chain IDs & RPCs](#chainids)
+- [How to add a network](#add)
+- [Public RPC endpoints](#rpc)
+- [Security & safe setup](#security)
+- [Networks & wallets](#wallets)
+- [FAQ](#faq)
+- [Open Chainslist App](dashboard/index.html)
+
+## Disclaimer
+Independent resource. Not affiliated with any wallet, RPC provider or chain. Not financial advice.
